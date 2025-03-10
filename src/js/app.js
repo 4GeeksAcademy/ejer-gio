@@ -22,25 +22,45 @@ import "../style/index.css";
         city: null
     }
  */
+
 function render(variables = {}) {
   console.log("These are the current variables: ", variables); // print on the console
   // here we ask the logical questions to make decisions on how to build the html
   // if includeCover==false then we reset the cover code without the <img> tag to make the cover transparent.
   let cover = `<div class="cover"><img src="${variables.background}" /></div>`;
   if (variables.includeCover == false) cover = "<div class='cover'></div>";
+  let socialNetworkLinks =
+    ""; /* = `
+  <li><a href="https://twitter.com/4geeksacademy"><i class="fab fa-twitter"></i></a></li>
+  <li><a href="https://github.com/4geeksacademy"><i class="fab fa-github"></i></a></li>
+  <li><a href="https://linkedin.com/school/4geeksacademy"><i class="fab fa-linkedin"></i></a></li>
+  <li><a href="https://instagram.com/4geeksacademy"><i class="fab fa-instagram"></i></a></li>`; */
 
-  // reset the website body with the new html output
+  let socialNetworks = [
+    "twitter",
+    "github",
+    "linkedin",
+    "instagram",
+    "facebook",
+    "tiktok"
+  ];
+  for (let network of socialNetworks) {
+    if (!variables[network]) continue;
+    let baseUrl = `https://${network}.com`;
+    if (network == "linkedin") {
+      baseUrl += "/in";
+    }
+    socialNetworkLinks += `<li><a href="${baseUrl}/${variables[network]}"><i class="fab fa-${network}"></i></a></li>`;
+  }
+
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
           <img src="${variables.avatarURL}" class="photo" />
-          <h1>Lucy Boilett</h1>
-          <h2>Web Developer</h2>
-          <h3>Miami, USA</h3>
-          <ul class="position-right">
-            <li><a href="https://twitter.com/4geeksacademy"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="https://github.com/4geeksacademy"><i class="fab fa-github"></i></a></li>
-            <li><a href="https://linkedin.com/school/4geeksacademy"><i class="fab fa-linkedin"></i></a></li>
-            <li><a href="https://instagram.com/4geeksacademy"><i class="fab fa-instagram"></i></a></li>
+          <h1>${variables.name} ${variables.lastName}</h1>
+          <h2>${variables.role}</h2>
+          <h3>${variables.city}, ${variables.country}</h3>
+          <ul class="${variables.socialMediaPosition}">
+           ${socialNetworkLinks}
           </ul>
         </div>
     `;
@@ -54,7 +74,8 @@ window.onload = function() {
     // if includeCover is true the algorithm should show the cover image
     includeCover: true,
     // this is the image's url that will be used as a background for the profile cover
-    background: "https://images.unsplash.com/photo-1511974035430-5de47d3b95da",
+    background:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     // this is the url for the profile avatar
     avatarURL: "https://randomuser.me/api/portraits/women/42.jpg",
     // social media bar position (left or right)
@@ -64,6 +85,8 @@ window.onload = function() {
     github: null,
     linkedin: null,
     instagram: null,
+    facebook: null,
+    tiktok: null,
     name: null,
     lastName: null,
     role: null,
